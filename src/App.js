@@ -1,24 +1,71 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+    const [inpValue,setInpValue] = useState('')
+    const [todoData,setTodoData] = useState([])
+
+
+
+
+
+  const addTodoHandler = () =>{
+    if(inpValue){
+
+      setTodoData(prev => [...prev,inpValue]);
+      setInpValue('')
+    }
+
+  }
+
+
+const deleteTodoHandler = (index) =>{
+
+  const newData = todoData.filter((e,i)=>i!==index);
+  setTodoData(newData);
+  // console.log(index);
+
+
+}
+const editTodoHandler = (index) =>{
+  let temp = prompt("Please enter new value");
+  const newData = [...todoData];
+  newData[index] = temp;
+  setTodoData(newData)
+}
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='documentDiv'>
+
+    <div className='deleteAllDiv'>
+
+      <button onClick={()=>{setTodoData([])}}>DeleteAll</button>
     </div>
+
+
+
+        <div className='newTodo'>
+
+           <input value={inpValue} placeholder='Enter todo' onChange={(e) => setInpValue(e.target.value)}/>
+           <button onClick={addTodoHandler}>Add</button>
+        </div>
+   
+   <div className='todosToBeRendered'>
+    <ul>
+      { todoData.length? 
+        todoData.map((todo,i) =><li key={i}>{todo}
+        <div>
+        <button onClick={() => editTodoHandler(i)}>Edit</button>
+        <button onClick={()=>deleteTodoHandler(i)}>delete</button>
+          </div> 
+        </li>):
+        'No todos'
+      }
+    </ul>
+   </div>
+      </div>
   );
 }
 
